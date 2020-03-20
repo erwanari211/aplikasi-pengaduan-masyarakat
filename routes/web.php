@@ -18,3 +18,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('feedback', 'FeedbackController@index')
+    ->name('feedback.index');
+
+Route::get('feedback/create', 'FeedbackController@create')
+    ->name('feedback.create')
+    ->middleware('auth');
+
+Route::post('feedback/', 'FeedbackController@store')
+    ->name('feedback.store')
+    ->middleware('auth');
