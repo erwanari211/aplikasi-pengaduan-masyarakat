@@ -29,3 +29,10 @@ Route::get('feedback/create', 'FeedbackController@create')
 Route::post('feedback/', 'FeedbackController@store')
     ->name('feedback.store')
     ->middleware('auth');
+
+Route::get('feedback/{feedback}', 'FeedbackController@show')
+    ->name('feedback.show');
+
+Route::post('feedback/{feedback}/response', 'ResponseController@store')
+    ->name('feedback.responses.store')
+    ->middleware('auth');

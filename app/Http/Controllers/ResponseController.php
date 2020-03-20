@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Feedback;
+use App\Models\Response;
 use Illuminate\Http\Request;
+use App\Models\Feedback;
 
-class FeedbackController extends Controller
+class ResponseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,7 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        $feedback = Feedback::with('user')->latest()->paginate(10);
-        return view('feedback.index', compact('feedback'));
+        //
     }
 
     /**
@@ -25,7 +25,7 @@ class FeedbackController extends Controller
      */
     public function create()
     {
-        return view('feedback.create');
+        //
     }
 
     /**
@@ -34,29 +34,24 @@ class FeedbackController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Feedback $feedback)
     {
         request()->validate([
             'content' => 'required',
-            'attachment' => 'nullable|file',
+            'status' => 'required|in:process,complete,spam',
         ]);
 
-        $feedback = Feedback::create([
+        $response = Response::create([
             'user_id' => auth()->user()->id,
+            'feedback_id' => $feedback->id,
             'posted_at' => date('Y-m-d'),
             'content' => request('content'),
+            'status' => request('status'),
         ]);
 
-        $file = request('attachment');
-        if ($file) {
-            $dir = 'uploads';
-            $fileName = time() . '-' . str_random(8) . '.' . $file->extension();
-            $file->move($dir, $fileName);
-            $filepath = $dir . '/' . $fileName;
-
-            $feedback->attachment = $filepath;
-            $feedback->save();
-        }
+        $feedback->update([
+            'status' => request('status'),
+        ]);
 
         session()->flash('successMessage', 'Data saved');
         return redirect()->back();
@@ -65,22 +60,21 @@ class FeedbackController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Feedback  $feedback
+     * @param  \App\Models\Response  $response
      * @return \Illuminate\Http\Response
      */
-    public function show(Feedback $feedback)
+    public function show(Response $response)
     {
-        $feedback->load('user', 'responses');
-        return view('feedback.show', compact('feedback'));
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Feedback  $feedback
+     * @param  \App\Models\Response  $response
      * @return \Illuminate\Http\Response
      */
-    public function edit(Feedback $feedback)
+    public function edit(Response $response)
     {
         //
     }
@@ -89,10 +83,10 @@ class FeedbackController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Feedback  $feedback
+     * @param  \App\Models\Response  $response
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Feedback $feedback)
+    public function update(Request $request, Response $response)
     {
         //
     }
@@ -100,10 +94,10 @@ class FeedbackController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Feedback  $feedback
+     * @param  \App\Models\Response  $response
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Feedback $feedback)
+    public function destroy(Response $response)
     {
         //
     }

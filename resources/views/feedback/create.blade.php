@@ -38,7 +38,7 @@
                     name="content"
                     class="form-control @error('content') is-invalid @enderror"
                     required
-                    rows="5">{{ old('email') }}</textarea>
+                    rows="5">{{ old('content') }}</textarea>
 
                   @error('content')
                     <span class="invalid-feedback" role="alert">

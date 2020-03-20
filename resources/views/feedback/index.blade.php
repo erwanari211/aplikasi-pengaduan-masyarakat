@@ -7,7 +7,9 @@
         @foreach ($feedback as $userFeedback)
           <div class="card mb-4">
             <div class="card-header">
-              {{ $userFeedback->user->name }} - {{ $userFeedback->posted_at }}
+              <a href="{{ route('feedback.show', $userFeedback->id) }}">
+                {{ $userFeedback->user->name }} - {{ $userFeedback->posted_at }}
+              </a>
             </div>
             <div class="card-body">
               {{ $userFeedback->content }}
