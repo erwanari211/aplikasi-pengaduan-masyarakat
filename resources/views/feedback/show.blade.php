@@ -23,6 +23,15 @@
           </div>
         </div>
 
+        @php
+          $isAdmin = false;
+          if (auth()->check()) {
+            $user = auth()->user();
+            $isAdmin = $user->is_admin;
+          }
+        @endphp
+        @if ($isAdmin)
+
         <!-- response form -->
         <div class="card mb-4">
           <div class="card-header">
@@ -114,6 +123,8 @@
           </div>
         </div>
         <!-- /response form -->
+
+        @endif
 
         <!-- responses -->
         @if ($feedback->responses)

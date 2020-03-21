@@ -25,6 +25,11 @@ class FeedbackController extends Controller
      */
     public function create()
     {
+        $user = auth()->user();
+        if ($user->is_admin) {
+            return abort(403);
+        }
+
         return view('feedback.create');
     }
 
@@ -36,6 +41,11 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
+        if ($user->is_admin) {
+            return abort(403);
+        }
+
         request()->validate([
             'content' => 'required',
             'attachment' => 'nullable|file',

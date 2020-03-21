@@ -36,6 +36,11 @@ class ResponseController extends Controller
      */
     public function store(Request $request, Feedback $feedback)
     {
+        $user = auth()->user();
+        if (!$user->is_admin) {
+            return abort(403);
+        }
+
         request()->validate([
             'content' => 'required',
             'status' => 'required|in:process,complete,spam',
